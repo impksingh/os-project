@@ -1,0 +1,115 @@
+#include <stdio.h>
+struct student
+{
+    int STD_ID,Time_for_food,WT,TAT;
+    
+};
+
+void get_data(struct student list[], int s);
+void show(struct student list[], int s);
+void scheduling(struct student list[], int s);
+void WT(struct student list[], int n);
+void TAT(struct student list[], int n);
+
+int main()
+{
+    struct student data[20];
+    int n,i;
+    char c='n';
+    do
+	{
+    printf("NUMBER OF STUDENT WANTS TO EAT IN MESS :- ");
+    scanf("%d", &n);
+    get_data(data, n);
+    scheduling(data, n);
+    WT(data,n);
+    TAT(data,n);
+    show(data, n);
+    printf("======================================WANT TO TRY FOR MORE VALUES=================================== ");
+    scanf("%s",&c);
+    }while(c=='y');
+    return 0;
+} 
+
+void get_data(struct student list[80], int s)
+{
+    int i;
+    for (i = 0; i < s; i++)
+    {
+        
+        printf("\nEnter Student id %d\t", i + 1);
+        scanf("%d", &list[i].STD_ID);
+
+        printf("Enter time taken for food (minuts) for Student %d\t", i + 1);
+        scanf("%d", &list[i].Time_for_food);
+    } 
+}
+void show(struct student list[80], int s)
+{
+    int i,AvgWT=0,AvgTAT=0;
+	int TotalWatingTime=0,TotalTAT=0;
+    printf("\n\nOutput according to LRTF\n");
+    printf("\n|Student id\tTime_for_food\tWT\t\tTAT  |");
+
+       
+    for (i = 0; i < s; i++)
+    {
+        printf("\n|%d\t\t%d\t\t%d\t\t%d\t\t|", list[i].STD_ID, list[i].Time_for_food,list[i].WT,list[i].TAT);
+		TotalWatingTime= TotalWatingTime+list[i].WT;
+		TotalTAT= TotalTAT+list[i].TAT;
+	} 
+	printf("\n\nTotal Waiting Time is: = %d",TotalWatingTime);
+	printf("\nTotal Turn around Time is: = %d\n\n",TotalTAT);
+	printf("\n\ntAverage Waiting Time is: = %d",TotalWatingTime/s);
+	printf("\nAverage Turn around Time is: = %d\n\n",TotalTAT/s);
+}
+
+void scheduling(struct student list[80], int s)
+{
+    int i, j;
+    struct student temp;
+    
+    for (i = 0; i < s - 1; i++)
+    {
+        for (j = 0; j < (s - 1-i); j++)
+        {
+            if (list[j].Time_for_food < list[j + 1].Time_for_food)
+            {
+                temp = list[j];
+                list[j] = list[j + 1];
+                list[j + 1] = temp;
+            } 
+            else if(list[j].Time_for_food == list[j + 1].Time_for_food)
+            {
+            	if(list[j].STD_ID > list[j + 1].STD_ID)
+            	{
+            	temp = list[j];
+                list[j] = list[j + 1];
+                list[j + 1] = temp;
+                }
+			}
+        }
+    }
+}
+
+
+void WT(struct student list[80], int n)
+{
+int j,total;
+list[0].WT=0;
+    for(j=1;j<n;j++)
+    {
+        list[j].WT=list[j-1].WT+list[j-1].Time_for_food;
+    }
+}
+
+
+void TAT(struct student list[80], int n)
+{
+int j,total;
+    
+           for(j=0;j<n;j++)
+         {
+          list[j].TAT=list[j].WT+list[j].Time_for_food;
+         }
+}
